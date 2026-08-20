@@ -4,19 +4,32 @@ pipeline {
 	stages {
 		stage('build') {
 			steps {
-				echo 'build'
+				sh '''
+					echo "Build stage" > app.txt
+				'''
 			}
 		}
 
 		stage('test') {
 			steps {
-				echo 'test'
+				sh '''
+					if [ -f app.txt ]; then
+						echo "app.txt exists"
+					else
+						echo "app.txt does not exist"
+						exit 1
+					fi
+				'''
 			}
 		}
 
 		stage('deploy') {
 			steps {
-				echo 'deploy'
+				sh '''
+					mkdir -p deploy
+					cp app.txt deploy/
+					ls -l deploy
+				'''
 			}
 		}
 	}
